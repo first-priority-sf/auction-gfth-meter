@@ -1,7 +1,10 @@
 <script lang="ts">
+  import { base } from "$app/paths";
+
   import { Label } from "$lib/components/ui/label";
   import { Input } from "$lib/components/ui/input";
   import { persisted } from "svelte-persisted-store";
+
   import Button from "$lib/components/ui/button/button.svelte";
 
   const max = persisted("max", 38_500);
@@ -71,7 +74,7 @@
 
 <Button
   class="absolute bottom-2 left-2"
-  href="/display"
+  href="{base}/display"
   target="_blank"
   on:click={subtract(10000)}>Open Display</Button
 >
