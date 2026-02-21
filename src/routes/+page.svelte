@@ -9,17 +9,16 @@
 
   const max = persisted("max", 38_500);
   const value = persisted("value", 0);
+  let adjustment = 100;
 
-  function add(amount: number) {
-    return () => {
-      $value = $value + amount;
-    };
+  function add() {
+    const amount = Math.max(adjustment || 0, 0);
+    $value = $value + amount;
   }
 
-  function subtract(amount: number) {
-    return () => {
-      $value = Math.max($value - amount, 0);
-    };
+  function subtract() {
+    const amount = Math.max(adjustment || 0, 0);
+    $value = Math.max($value - amount, 0);
   }
 
   const formatter = new Intl.NumberFormat("en-US", {
@@ -28,7 +27,6 @@
     maximumSignificantDigits: 3,
   });
 
-  const AMOUNTS = [100, 500, 1000, 2500, 7500, 15000];
 </script>
 
 <div
@@ -41,19 +39,13 @@
   <h1 class="text-4xl font-extrabold tracking-tight scroll-m-20 lg:text-5xl">
     {formatter.format($value)}
   </h1>
-  <div class="flex space-x-2">
-    {#each AMOUNTS as amount}
-      <Button size="lg" variant="default" on:click={add(amount)}>
-        + {formatter.format(amount)}
-      </Button>
-    {/each}
+  <div class="flex w-full max-w-sm flex-col gap-1.5">
+    <Label for="adjustment">Amount</Label>
+    <Input id="adjustment" type="number" min="0" bind:value={adjustment} />
   </div>
   <div class="flex space-x-2">
-    {#each AMOUNTS as amount}
-      <Button size="lg" variant="destructive" on:click={subtract(amount)}>
-        - {formatter.format(amount)}
-      </Button>
-    {/each}
+    <Button size="lg" variant="default" on:click={add}>Add</Button>
+    <Button size="lg" variant="destructive" on:click={subtract}>Subtract</Button>
   </div>
 </div>
 
